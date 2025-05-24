@@ -1,9 +1,8 @@
-const { Client } = require('ssh2-sftp-client');
+const Client = require('ssh2-sftp-client');
 const path = require('path');
 const fs = require('fs');
 const { MissingParameterError } = require('../exceptions/upload.exceptions.js');
-const { sftpConfig } = require('../config/sftp.config.js');
-
+const { sftpConfig } = require('../config/index.config.js');
 const { removeTempFile } = require('../utils/fix-permissions.js');
 
 /**
@@ -54,3 +53,7 @@ async function getConsentFile(req, res) {
         await sftp.end();
     }
 }
+
+module.exports = {
+    getConsentFile,
+};

@@ -1,16 +1,16 @@
-FROM node:18-alpine
+FROM node:22-alpine
 
-# Crea el directorio de la app
 WORKDIR /usr/src/app
 
-# Copia solo package.json para cachear npm install
+ARG NODE_ENV=development
+ENV NODE_ENV=$NODE_ENV
+
 COPY package*.json ./
 RUN npm install
 
-# Copia el resto del código
 COPY . .
 
-# Puerto por defecto
 EXPOSE 3000
 
-CMD ["node", "index.js"]
+# Use the environment-aware start script
+CMD ["npm", "run", "start:env"]
