@@ -6,7 +6,25 @@ const { removeTempFile } = require('../utils/fix-permissions.js');
 const { FileNotFoundError, MissingParameterError } = require('../exceptions/upload.exceptions.js');
 
 /**
- * Handle consent form upload
+ * Uploads a consent file to the SFTP server
+ * @param {Object} req - Express request object
+ * @param {Object} req.file - The uploaded file object from multer middleware
+ * @param {string} req.file.path - Temporary path of uploaded file
+ * @param {string} req.file.originalname - Original name of uploaded file
+ * @param {Object} req.body - Request body object
+ * @param {string} req.body.username - Username of the user uploading the consent
+ * @param {Object} res - Express response object
+ * @returns {Object} Response object containing:
+ *   - success {boolean} - Indicates if upload was successful
+ *   - filename {string} - Name of the uploaded file
+ *   - locations {Object} - Object containing various file paths:
+ *     - api {string} - API endpoint to retrieve the file
+ *     - localPath {string} - Absolute path on host machine
+ *     - relativePath {string} - Relative path within project
+ *   - message {string} - Success message with filename
+ * @throws {FileNotFoundError} When no file is uploaded
+ * @throws {MissingParameterError} When username is missing
+ * @throws {Error} When SFTP operations fail
  */
 async function uploadConsent(req, res) {
     // Validate file exists

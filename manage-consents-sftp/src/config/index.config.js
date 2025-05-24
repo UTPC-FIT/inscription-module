@@ -27,10 +27,12 @@ const upload = multer({
 // Server configuration
 const PORT = process.env.PORT || 3000;
 const IP_ADDRESS = process.env.IP_ADDRESS || 'localhost';
+const BASE_API = '/api/consents/';
 
 module.exports = {
   sftpConfig,
   upload,
   PORT,
   IP_ADDRESS,
+  BASE_API,
 };

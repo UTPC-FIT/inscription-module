@@ -1,5 +1,5 @@
 const express = require('express');
-const { PORT, IP_ADDRESS } = require('./config/index.config.js');
+const { PORT, IP_ADDRESS, BASE_API } = require('./config/index.config.js');
 const uploadRoutes = require('./routes/upload.routes.js');
 
 const app = express();
@@ -9,7 +9,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Routes
-app.use('/', uploadRoutes);
+app.use(BASE_API, uploadRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
