@@ -1,0 +1,22 @@
+services:
+  sftp:
+    image: atmoz/sftp
+    ports:
+      - "2223:22"
+    volumes:
+      - ./upload:/home/uptc-fit-sftp/upload
+    command: uptc-fit-sftp:dcdl:1001
+
+  uptc-fit-sftp-node-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3000"
+    volumes:
+      - ./:/usr/src/app
+      - ./upload:/usr/src/app/upload
+    depends_on:
+      - sftp
+    env_file:
+      - .env
