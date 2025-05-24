@@ -21,6 +21,10 @@ class StudentRepository {
     async findById(id_student) {
         return Student.findOne({ id_student });
     }
+
+    async getAll() {
+        return Student.find();
+    }
 }
 
 module.exports = new StudentRepository();

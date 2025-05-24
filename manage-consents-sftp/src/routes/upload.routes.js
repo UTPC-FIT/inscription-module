@@ -13,6 +13,6 @@ const asyncHandler = fn => (req, res, next) => {
 router.post('/upload-consent', upload.single('file'), asyncHandler(uploadConsent));
 
 // Get consent PDF by filename
-router.get('/file/:fileName', asyncHandler(getConsentFile));
+router.get('/consent/:fileName', asyncHandler(getConsentFile));
 
 module.exports = router;

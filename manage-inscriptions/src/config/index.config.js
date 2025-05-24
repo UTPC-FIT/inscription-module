@@ -12,7 +12,7 @@ const MONGO_URI = process.env.MONGO_URI ||
 const API_CONSENTS = process.env.API_CONSENTS || 'http://localhost:3001/api/consents';
 const endpointsConsents = {
   upload: `${API_CONSENTS}/upload-consent`,
-  getFile: `${API_CONSENTS}/file`,
+  getFile: `${API_CONSENTS}/consent`,
 };
 
 module.exports = {

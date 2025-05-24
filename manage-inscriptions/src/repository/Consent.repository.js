@@ -28,6 +28,27 @@ class ConsentRepository {
             throw new ApiError(err.response?.status || 500, `Error uploading file: ${errorMessage}`);
         }
     }
+
+    async findByFilename(filename) {
+        try {
+            const { data, headers } = await httpClient.get(`/consent/${filename}`, {
+                responseType: 'arraybuffer',
+                timeout: 30000,
+            });
+
+            return {
+                data,
+                contentType: headers['content-type'] || 'application/pdf',
+                filename
+            };
+        } catch (err) {
+            console.error('Detail Error:', err);
+            console.error('Response:', err.response?.data);
+
+            const errorMessage = err.response?.data?.message || err.message;
+            throw new ApiError(err.response?.status || 500, `Error retrieving consent file: ${errorMessage}`);
+        }
+    }
 }
 
 module.exports = new ConsentRepository();

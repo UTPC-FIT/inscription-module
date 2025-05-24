@@ -1,8 +1,10 @@
 const ApiError = require('./ApiError');
 
 class DuplicateKeyError extends ApiError {
-    constructor(message, field = null) {
-        super(409, message); // 409 Conflict es el código apropiado para conflictos de recursos
+    constructor(message = 'Duplicate key error', field = null) {
+        super(message);
+        this.name = 'DuplicateKeyError';
+        this.statusCode = 409; // Conflict
         this.field = field;
         Error.captureStackTrace(this, this.constructor);
     }
