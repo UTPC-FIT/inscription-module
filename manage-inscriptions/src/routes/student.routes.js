@@ -1,7 +1,7 @@
 const express = require('express');
 const multer = require('multer');
 const path = require('path');
-const { create } = require('../controllers/StudentController.js');
+const { create } = require('../controllers/Student.controller.js');
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => cb(null, path.join(__dirname, '../upload')),

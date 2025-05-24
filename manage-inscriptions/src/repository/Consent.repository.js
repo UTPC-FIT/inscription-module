@@ -4,16 +4,28 @@ const httpClient = require('../utils/httpClient.js');
 const ApiError = require('../exceptions/ApiError.js');
 
 class ConsentRepository {
-    async uploadConsent(file) {
+    async uploadConsent(file, username) {
         const form = new FormData();
         form.append('file', fs.createReadStream(file.path), file.originalname);
+        form.append('username', username);
         const headers = form.getHeaders();
 
         try {
-            const { data } = await httpClient.post('/upload-consent', form, { headers });
-            return data[0];
+            console.log('Sending request to', `${httpClient.defaults.baseURL}/upload-consent`);
+            console.log('File:', file.path, file.originalname);
+            console.log('Username:', username);
+
+            const { data } = await httpClient.post('/upload-consent', form, {
+                headers,
+                timeout: 30000,
+            });
+            return data;
         } catch (err) {
-            throw new ApiError(err.response?.status || 500, err.message);
+            console.error('Detail Error:', err);
+            console.error('Response:', err.response?.data);
+
+            const errorMessage = err.response?.data?.message || err.message;
+            throw new ApiError(err.response?.status || 500, `Error uploading file: ${errorMessage}`);
         }
     }
 }

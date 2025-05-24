@@ -6,6 +6,8 @@ services:
     volumes:
       - ./upload:/home/uptc-fit-sftp/upload
     command: uptc-fit-sftp:dcdl:1001
+    networks:
+      - backend
 
   uptc-fit-sftp-node-app:
     build:
@@ -24,3 +26,10 @@ services:
       - .env
     environment:
       - NODE_ENV=${NODE_ENV:-development}
+    networks:
+      - backend
+
+networks:
+  backend:
+    name: inscription-uptc-fit-network
+    external: true
