@@ -1,9 +1,25 @@
 const express = require('express');
+const cors = require('cors');
+
 const studentRoutes = require('./routes/student.routes');
+const { allowedOrigins } = require('./config/index.config');
 
 const app = express();
 
+const corsOptions = {
+    origin: function (origin, callback) {
+        if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
+    credentials: true,
+    optionsSuccessStatus: 200
+};
+
 // Middlewares
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 

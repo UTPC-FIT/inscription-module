@@ -3,7 +3,11 @@ const path = require('path');
 const fs = require('fs');
 const { sftpConfig } = require('../config/index.config.js');
 const { removeTempFile } = require('../utils/fix-permissions.js');
-const { FileNotFoundError, MissingParameterError } = require('../exceptions/upload.exceptions.js');
+const {
+    FileNotFoundError,
+    MissingParameterError,
+    DuplicateKeyError
+} = require('../exceptions/upload.exceptions.js');
 
 /**
  * Uploads a consent file to the SFTP server
@@ -42,13 +46,6 @@ async function uploadConsent(req, res) {
     const timestamp = Date.now();
     const fileExtension = path.extname(req.file.originalname);
 
-    // Create filename: username + "consent" + timestamp + extension
-    const remoteFileName = `${username}_consent_${timestamp}${fileExtension}`;
-
-    // Important: Make sure this path matches exactly with how the volume is mounted
-    // in the SFTP container. Based on your error, change this to just the filename
-    const remotePath = remoteFileName;
-
     const sftp = new Client();
     try {
         // Connect to SFTP
@@ -59,14 +56,24 @@ async function uploadConsent(req, res) {
             password: sftpConfig.password
         });
 
-        // IMPORTANT CHANGE: Don't try to create directories
-        // The upload directory is already mounted in docker-compose.yml
+        // Check if a file for this username already exists
+        const uploadDir = 'upload/';
+        const fileList = await sftp.list(uploadDir);
+        const existingFile = fileList.find(file =>
+            file.name.startsWith(`${username}_consent_`)
+        );
 
-        // Use the upload directory directly - it's already mounted
+        if (existingFile) {
+            throw new DuplicateKeyError(`A consent file already exists for user ${username}`);
+        }
+
+        // Create filename and continue with upload
+        const remoteFileName = `${username}_consent_${timestamp}${fileExtension}`;
+        const remotePath = remoteFileName;
         const finalRemotePath = `upload/${remotePath}`;
-        console.log(`Uploading to: ${finalRemotePath}`);
 
-        // Upload the file
+        // Continue with the rest of your existing upload logic
+        console.log(`Uploading to: ${finalRemotePath}`);
         await sftp.put(localPath, finalRemotePath);
 
         // Get the current working directory for absolute path reference

@@ -15,9 +15,16 @@ const endpointsConsents = {
   getFile: `${API_CONSENTS}/consent`,
 };
 
+// CORS configuration
+const allowedOrigins = [
+  process.env.DEV_URL || 'http://localhost:5173',
+  process.env.PROD_URL || 'http://manage-inscriptions-uptc-fit-frontend-1'
+];
+
 module.exports = {
   PORT,
   IP_ADDRESS,
   MONGO_URI,
   endpointsConsents,
+  allowedOrigins,
 };

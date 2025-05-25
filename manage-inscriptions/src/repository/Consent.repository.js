@@ -22,9 +22,9 @@ class ConsentRepository {
             return data;
         } catch (err) {
             console.error('Detail Error:', err);
-            console.error('Response:', err.response?.data);
+            console.error('Response:', err.response?.data?.error);
 
-            const errorMessage = err.response?.data?.message || err.message;
+            const errorMessage = err.response?.data?.error || err.message;
             throw new ApiError(err.response?.status || 500, `Error uploading file: ${errorMessage}`);
         }
     }
@@ -43,9 +43,9 @@ class ConsentRepository {
             };
         } catch (err) {
             console.error('Detail Error:', err);
-            console.error('Response:', err.response?.data);
+            console.error('Response:', err.response?.data?.error);
 
-            const errorMessage = err.response?.data?.message || err.message;
+            const errorMessage = err.response?.data?.error || err.message;
             throw new ApiError(err.response?.status || 500, `Error retrieving consent file: ${errorMessage}`);
         }
     }

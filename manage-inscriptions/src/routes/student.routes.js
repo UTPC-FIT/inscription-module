@@ -15,7 +15,7 @@ router.get('/', getAllStudents);
 router.get('/:id_student', getStudentById);
 router.get('/consent/:id_student', getConsentByStudentId);
 
-router.post('/new-student', upload.single('file'), create);
+router.post('/register', upload.single('file'), create);
 
 module.exports = router;
 

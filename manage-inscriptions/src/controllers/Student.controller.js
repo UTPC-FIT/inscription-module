@@ -21,13 +21,14 @@ exports.create = async (req, res, next) => {
         const studentDto = await StudentService.createStudent({ id_student, emergency_contacts: contacts, file, username });
         res.status(201).json(studentDto);
     } catch (err) {
+        console.error('Error in create student:', err);
         if (err instanceof DuplicateKeyError) {
-            return res.status(err.statusCode).json({
-                message: err.message,
-                field: err.field
+            return res.status(409).json({
+                status: 'error',
+                message: err.message || `Student with ID ${req.body.id_student} already exists`,
+                code: 'DUPLICATE_KEY_ERROR'
             });
         }
-        console.error(err);
         next(err);
     }
 };

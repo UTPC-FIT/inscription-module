@@ -22,8 +22,18 @@ class MissingParameterError extends Error {
     }
 }
 
+class DuplicateKeyError extends Error {
+    constructor(message) {
+        super(message || 'A file with this username already exists');
+        this.name = 'DuplicateKeyError';
+        this.statusCode = 409;
+        console.error(this.message);
+    }
+}
+
 module.exports = {
     FileUploadError,
     FileNotFoundError,
-    MissingParameterError
+    MissingParameterError,
+    DuplicateKeyError,
 };
