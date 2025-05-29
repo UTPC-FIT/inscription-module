@@ -101,3 +101,74 @@ exports.getConsentByStudentId = async (req, res, next) => {
         next(err);
     }
 }
+
+exports.isConsentValid = async (req, res, next) => {
+    try {
+        const { id_student } = req.params;
+
+        if (!id_student) {
+            throw new ValidationError('id_student is required');
+        }
+
+        const student = await StudentService.getStudentById(id_student);
+
+        if (!student) {
+            throw new ResourceNotFoundError(`Student with id ${id_student} not found`);
+        }
+
+        if (!student.consent) {
+            throw new ResourceNotFoundError(`Consent for student with id ${id_student} not found`);
+        }
+
+        res.status(200).json({
+            id_student: student.id_student,
+            isValid: student.consent.approved,
+            approvedAt: student.consent.approvedAt,
+            approved_by: student.consent.id_approved_by
+        });
+    } catch (err) {
+        console.error(err);
+        next(err);
+    }
+};
+
+exports.updateConsentApproval = async (req, res, next) => {
+    try {
+
+        console.log('Updating consent approval for student');
+
+        const { id_student } = req.params;
+        const { approved, id_approved_by } = req.body;
+
+        if (!id_student) {
+            throw new ValidationError('id_student is required');
+        }
+
+        if (approved === undefined) {
+            throw new ValidationError('approved status is required');
+        }
+
+        if (approved && !id_approved_by) {
+            throw new ValidationError('id_approved_by is required when approving a consent');
+        }
+
+        const updatedConsent = await StudentService.updateConsentApproval(id_student, approved, id_approved_by);
+
+        if (!updatedConsent) {
+            throw new ResourceNotFoundError(`Student with id ${id_student} not found`);
+        }
+
+        res.status(200).json({
+            id_student,
+            consent: {
+                approved: updatedConsent.approved,
+                approvedAt: updatedConsent.approvedAt,
+                id_approved_by: updatedConsent.id_approved_by
+            },
+            message: `Consent status updated successfully to ${approved ? 'approved' : 'not approved'}`
+        });
+    } catch (err) {
+        console.error('Error updating consent approval:', err);
+        next(err);
+    }
+};

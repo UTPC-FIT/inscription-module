@@ -24,7 +24,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Routes
-app.use('/students', studentRoutes);
+app.use('/', (req, res, next) => {
+    console.log(`Request received at microservice: ${req.method} ${req.originalUrl}`);
+    next();
+}, studentRoutes);
 
 // Global error handler
 app.use((err, req, res, next) => {

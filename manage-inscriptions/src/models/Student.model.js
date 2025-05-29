@@ -17,6 +17,7 @@ const ConsentSchema = new mongoose.Schema({
     message: { type: String, required: true },
     createdAt: { type: Date, default: Date.now },
     approved: { type: Boolean, default: false },
+    id_approved_by: { type: String, default: null },
     approvedAt: { type: Date, default: null },
 }, { _id: false });
 

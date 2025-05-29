@@ -63,6 +63,39 @@ class StudentService {
         return consent;
     }
 
+    async updateConsentApproval(id_student, approved, id_approved_by) {
+        try {
+            const updateData = {
+                'consent.approved': approved,
+            };
+
+            if (approved) {
+                updateData['consent.approvedAt'] = new Date();
+                updateData['consent.id_approved_by'] = id_approved_by;
+            } else {
+                updateData['consent.approvedAt'] = null;
+                updateData['consent.id_approved_by'] = null;
+            }
+
+            const result = await StudentRepository.findOneAndUpdate(
+                { id_student },
+                { $set: updateData },
+                { new: true } // Return the updated document
+            );
+
+            if (!result) {
+                throw new ResourceNotFoundError(`Student with id ${id_student} not found`);
+            }
+
+            return result.consent;
+        } catch (error) {
+            if (error.name === 'CastError') {
+                throw new ValidationError('Invalid student ID format');
+            }
+            throw error;
+        }
+    };
+
 }
 
 module.exports = new StudentService();

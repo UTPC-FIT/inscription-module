@@ -9,14 +9,14 @@ services:
     networks:
       - backend
 
-  uptc-fit-sftp-node-app:
+  node-app:
     build:
       context: .
       dockerfile: Dockerfile
       args:
         - NODE_ENV=${NODE_ENV:-development}
     ports:
-      - "3001:3000"
+      - "7011:3000"
     volumes:
       - ./:/usr/src/app
       - ./upload:/usr/src/app/upload

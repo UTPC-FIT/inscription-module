@@ -1,12 +1,12 @@
 services:
-  uptc-fit-inscription-node-app:
+  node-app:
     build:
       context: .
       dockerfile: Dockerfile
       args:
         - NODE_ENV=${NODE_ENV:-development}
     ports:
-      - "3002:3000"
+      - "7010:3000"
     volumes:
       - ./:/usr/src/app
       - ./upload:/usr/src/app/src/upload

@@ -25,6 +25,10 @@ class StudentRepository {
     async getAll() {
         return Student.find();
     }
+
+    async findOneAndUpdate(query, update, options) {
+        return Student.findOneAndUpdate(query, update, options);
+    }
 }
 
 module.exports = new StudentRepository();
