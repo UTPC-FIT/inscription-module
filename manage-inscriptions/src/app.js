@@ -6,6 +6,7 @@ const { allowedOrigins } = require('./config/index.config');
 
 const app = express();
 
+
 const corsOptions = {
     origin: function (origin, callback) {
         if (!origin || allowedOrigins.indexOf(origin) !== -1) {
@@ -26,6 +27,7 @@ app.use(express.urlencoded({ extended: true }));
 // Routes
 app.use('/', (req, res, next) => {
     console.log(`Request received at microservice: ${req.method} ${req.originalUrl}`);
+    console.log(`Request body:`, req.body);
     next();
 }, studentRoutes);
 

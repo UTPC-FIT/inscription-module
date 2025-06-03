@@ -7,7 +7,8 @@ const {
     getStudentById,
     getConsentByStudentId,
     isConsentValid,
-    updateConsentApproval
+    updateConsentApproval,
+    assignRoleToUser,
 } = require('../controllers/Student.controller.js');
 
 const storage = multer.diskStorage({

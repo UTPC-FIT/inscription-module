@@ -2,7 +2,7 @@ services:
   sftp:
     image: atmoz/sftp
     ports:
-      - "2223:22"
+      - "7012:22"
     volumes:
       - ./upload:/home/uptc-fit-sftp/upload
     command: uptc-fit-sftp:dcdl:1001

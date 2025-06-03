@@ -113,11 +113,11 @@ exports.isConsentValid = async (req, res, next) => {
         const student = await StudentService.getStudentById(id_student);
 
         if (!student) {
-            throw new ResourceNotFoundError(`Student with id ${id_student} not found`);
+            throw new ResourceNotFoundError(`Student with id ${id_student}`);
         }
 
         if (!student.consent) {
-            throw new ResourceNotFoundError(`Consent for student with id ${id_student} not found`);
+            throw new ResourceNotFoundError(`Consent for student with id ${id_student}`);
         }
 
         res.status(200).json({
@@ -155,7 +155,7 @@ exports.updateConsentApproval = async (req, res, next) => {
         const updatedConsent = await StudentService.updateConsentApproval(id_student, approved, id_approved_by);
 
         if (!updatedConsent) {
-            throw new ResourceNotFoundError(`Student with id ${id_student} not found`);
+            throw new ResourceNotFoundError(`Student with id ${id_student}`);
         }
 
         res.status(200).json({
@@ -169,6 +169,6 @@ exports.updateConsentApproval = async (req, res, next) => {
         });
     } catch (err) {
         console.error('Error updating consent approval:', err);
-        next(err);
+        next(err, new InternalServerError('Error updating consent approval'));
     }
 };
